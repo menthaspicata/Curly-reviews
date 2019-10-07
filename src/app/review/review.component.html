@@ -1,0 +1,28 @@
+<div class="container">
+  <form onsubmit="return false" id="form_id">
+    <mat-form-field>
+      <input matInput placeholder="Ваше имя" [formControl]="nameValid" type="text" id="reviewer_name" class="form-control"
+             [(ngModel)]="form.reviewer_name"  required>
+
+      <mat-error class="error" *ngIf="nameValid.invalid">{{getErrorMessageName()}}</mat-error>
+    </mat-form-field>
+
+    <mat-form-field>
+    <textarea matInput placeholder="Отзыв" [formControl]="messageValid" type="text" id="message" class="md-textarea" [(ngModel)]="form.message"
+               required></textarea>
+      <mat-error class="error" *ngIf="messageValid.invalid">{{getErrorMessageReview()}}</mat-error>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" (click)="send()" type="submit"
+            class="btn btn-info waves-light menu-close">Отправить
+    </button>
+  </form>
+
+  <div class="reviews">
+    <mat-card id="reviews" class="review-card" *ngFor="let single_review of review_data">
+      <p class="name_of_reviewer">{{single_review.reviewer_name}}</p>
+      {{single_review.message}}
+    </mat-card>
+    <br>
+  </div>
+</div>

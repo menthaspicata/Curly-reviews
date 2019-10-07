@@ -1,0 +1,25 @@
+@import "~src/app/variables.scss";
+
+form {
+  display: flex;
+  flex-direction: column;
+  width: 500px;
+  margin: 0 auto 30px;
+}
+
+.reviews {
+  .review-card {
+    display: inline-block;
+    width: 44%;
+    vertical-align: top;
+    margin-bottom: 40px;
+    .name_of_reviewer {
+      font-weight: 500;
+      margin-bottom: 10px;
+    }
+    &:nth-child(odd) {
+      margin-right: 40px;
+    }
+  }
+}
+

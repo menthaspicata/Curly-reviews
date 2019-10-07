@@ -1,0 +1,23 @@
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons"
+      rel="stylesheet">
+<header>
+  <img src="../assets/logo_curly.png" alt="logo" class="logo">
+</header>
+<div class="container change-reviews">
+
+
+  <mat-button-toggle-group #group="matButtonToggleGroup">
+
+    <mat-button-toggle [routerLink]="['/review']" value="review" aria-label="Text align left">
+      Отзывы
+    </mat-button-toggle>
+    <mat-button-toggle [routerLink]="['/review-ua']" value="review-ua" aria-label="Text align center">
+      Отзывы UA
+    </mat-button-toggle>
+    <mat-button-toggle [routerLink]="['/review-rus']" value="review-rus" aria-label="Text align right">
+      Отзывы RUS
+    </mat-button-toggle>
+  </mat-button-toggle-group>
+</div>
+
+<router-outlet></router-outlet>
