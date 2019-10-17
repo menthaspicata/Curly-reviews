@@ -5,6 +5,9 @@ form {
   flex-direction: column;
   width: 500px;
   margin: 0 auto 30px;
+  @include _600 {
+    width: 100%;
+  }
 }
 
 .reviews {
@@ -13,12 +16,27 @@ form {
     width: 44%;
     vertical-align: top;
     margin-bottom: 40px;
+
+    @include _979 {
+      display: block;
+      width: auto;
+    }
     .name_of_reviewer {
       font-weight: 500;
       margin-bottom: 10px;
     }
     &:nth-child(odd) {
       margin-right: 40px;
+      @include _979 {
+        margin-right: 0;
+      }
+    }
+  }
+  .buttons {
+    display: flex;
+    justify-content: space-between;
+    p {
+      flex: 1 1;
     }
   }
 }

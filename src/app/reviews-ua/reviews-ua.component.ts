@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+
+import { ReviewService } from '../review.service';
 
 interface Review {
   review_date: string;
@@ -14,15 +15,14 @@ interface Review {
 export class ReviewsUaComponent implements OnInit {
   review_data: Review[];
 
-  constructor(private http: HttpClient) { }
+  constructor(private reviewService: ReviewService) { }
 
   ngOnInit() {
-    this.http.get(`http://localhost:8010/review-ua`).subscribe(
-      (data: any) => {
-        console.log(data);
+    this.reviewService
+      .getReviewsList( 'review-ua' )
+      .subscribe(   (data: any) => {
         this.review_data = data;
-      }
-    );
+      });
   }
 
 }

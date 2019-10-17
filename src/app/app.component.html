@@ -4,9 +4,7 @@
   <img src="../assets/logo_curly.png" alt="logo" class="logo">
 </header>
 <div class="container change-reviews">
-
-
-  <mat-button-toggle-group #group="matButtonToggleGroup">
+  <mat-button-toggle-group class="toggle-reviews-button" #group="matButtonToggleGroup">
 
     <mat-button-toggle [routerLink]="['/review']" value="review" aria-label="Text align left">
       Отзывы
@@ -19,5 +17,4 @@
     </mat-button-toggle>
   </mat-button-toggle-group>
 </div>
-
 <router-outlet></router-outlet>

@@ -12,13 +12,16 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { ReviewComponent } from './review/review.component';
 import { ReviewsUaComponent } from './reviews-ua/reviews-ua.component';
 import { ReviewsRusComponent } from './reviews-rus/reviews-rus.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
+//material
 import { MatButtonModule } from '@angular/material/button';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatButtonToggleModule} from '@angular/material/button-toggle';
 import {MatCardModule} from '@angular/material/card';
+import {MatSnackBarModule} from '@angular/material/snack-bar';
 
 const appRoutes: Routes =[
   { path: 'review', component: ReviewComponent},
@@ -45,7 +48,9 @@ const appRoutes: Routes =[
     MatInputModule,
     MatFormFieldModule,
     MatButtonToggleModule,
-    MatCardModule
+    MatCardModule,
+    FontAwesomeModule,
+    MatSnackBarModule
   ],
   providers: [
   ],

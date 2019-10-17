@@ -20,6 +20,8 @@ app.post('/review', contactsController.handleContactRequest);
 app.get('/review', contactsController.getReviewsFromSite);
 app.get('/review-ua', contactsController.getReviewsFromUAChat);
 app.get('/review-rus', contactsController.getReviewsFromRUSChat);
+app.put('/review/:id', contactsController.updateReviewsFromSite);
+app.delete('/review/:id', contactsController.deleteReviewsFromSite);
 
 app.listen(config.port, () => {
     console.info(`api [on] port: ${config.port}`);

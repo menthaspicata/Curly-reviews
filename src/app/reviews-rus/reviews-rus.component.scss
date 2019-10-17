@@ -1,17 +1,20 @@
 @import "~src/app/variables.scss";
 
-.reviews {
+.review-card {
+  display: inline-block;
+  width: 44%;
+  vertical-align: top;
+  margin-bottom: 40px;
 
-  .review-card {
-    display: inline-block;
-    width: 44%;
-    vertical-align: top;
-    margin-bottom: 40px;
-
-    &:nth-child(odd) {
-      margin-right: 40px;
+  @include _979 {
+    display: block;
+    width: auto;
+  }
+  &:nth-child(odd) {
+    margin-right: 40px;
+    @include _979 {
+      margin-right: 0;
     }
   }
-
 }
 

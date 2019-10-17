@@ -1,8 +1,13 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import {Component, OnInit, Input} from '@angular/core';
 import {FormControl, Validators} from '@angular/forms';
+import {faPen} from '@fortawesome/free-solid-svg-icons';
+import {faTrash} from '@fortawesome/free-solid-svg-icons';
+import {MatSnackBar} from '@angular/material/snack-bar';
+
+import {ReviewService} from '../review.service';
 
 interface Review {
+  id: number;
   review_date: string;
   reviewer_name: string;
   message: string;
@@ -14,7 +19,12 @@ interface Review {
   styleUrls: ['./review.component.scss']
 })
 export class ReviewComponent implements OnInit {
-  public form = {
+
+  faPen = faPen;
+  faTrash = faTrash;
+
+  public single_review = {
+    id: undefined,
     review_date: undefined,
     reviewer_name: undefined,
     message: undefined
@@ -22,16 +32,26 @@ export class ReviewComponent implements OnInit {
 
   review_data: Review[];
 
+  selectedReview: Review;
+
   error = false;
-  constructor(private http: HttpClient) { }
+
+  constructor(private reviewService: ReviewService,
+              private _snackBar: MatSnackBar) {
+  }
+
+  openSnackBar() {
+    this._snackBar.open('Отзыв успешно отправлен', '', {
+      duration: 3000
+    })
+  }
 
   ngOnInit() {
-    this.http.get(`http://localhost:8010/review`).subscribe(
-      (data: any) => {
-        console.log(data);
+    this.reviewService
+      .getReviewsList('review')
+      .subscribe((data: any) => {
         this.review_data = data;
-      }
-    );
+      });
   }
 
   nameValid = new FormControl('', [Validators.required]);
@@ -39,7 +59,7 @@ export class ReviewComponent implements OnInit {
 
   getErrorMessageName() {
     return this.nameValid.hasError('required') ? 'Введите ваше имя' :
-        '';
+      '';
   }
 
   getErrorMessageReview() {
@@ -48,35 +68,61 @@ export class ReviewComponent implements OnInit {
   }
 
   send() {
-    console.log(this.form);
-    if (this.form.review_date == undefined ||
-      this.form.reviewer_name == undefined ||
-      this.form.message == undefined) {
-      this.error = true;
+    if (!this.single_review.id) {
+      if (this.single_review.review_date == undefined ||
+        this.single_review.reviewer_name == undefined ||
+        this.single_review.message == undefined) {
+        this.error = true;
+      }
+
+      let data = {
+        name: this.single_review.reviewer_name,
+        date: new Date(),
+        message: this.single_review.message
+      };
+
+      if (this.single_review.reviewer_name != undefined &&
+        this.single_review.message != undefined &&
+        this.single_review.reviewer_name.trim().length != 0 &&
+        this.single_review.message.trim().length != 0) {
+        this.reviewService
+          .createReview(data)
+          .subscribe(
+            suc => {
+              this.openSnackBar();
+            }
+          );
+      }
+    } else {
+      if (this.single_review.reviewer_name != undefined &&
+        this.single_review.message != undefined &&
+        this.single_review.reviewer_name.trim().length != 0 &&
+        this.single_review.message.trim().length != 0) {
+        this.reviewService
+          .updateReview(this.single_review.id, this.single_review)
+          .subscribe(
+            suc => {
+              this.openSnackBar();
+            }
+          )
+      }
     }
-    if (this.form.reviewer_name == undefined) {
-      console.log('нет name');
-    }
-    if (this.form.message == undefined) {
-      console.log('нет message');
-    }
+  }
 
+  onSelect(single_review): void {
+    this.single_review = single_review;
+  }
 
-    let data = {
-      name: this.form.reviewer_name,
-      date: new Date(),
-      message: this.form.message
-    };
-
-    if (this.form.reviewer_name != undefined &&
-      this.form.message != undefined) {
-      this.http.post(`http://localhost:8010/review`, data).subscribe(
-        (res: any) => {
-
+  delete(id) {
+    this.reviewService
+      .deleteReview(id)
+      .subscribe(
+        (res) => {
+          this.review_data = this.review_data.filter((review) => {
+            return review.id !== id;
+          });
         }
-      );
-    }
-
+      )
 
   }
 }
