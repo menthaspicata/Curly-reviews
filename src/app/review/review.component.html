@@ -1,23 +1,31 @@
 <div class="container">
-  <form onsubmit="return false" id="form_id">
+  <form [formGroup]="registerForm" (ngSubmit)="send()" id="form_id">
     <mat-form-field>
-      <input matInput placeholder="Ваше имя" [formControl]="nameValid" type="text" id="reviewer_name"
-             class="form-control"
-             [(ngModel)]="single_review.reviewer_name" required>
+      <input matInput placeholder="Ваше имя" type="text" id="reviewer_name"
+             class="form-control" [(ngModel)]="single_review.reviewer_name" formControlName="reviewer_name"
+             [ngClass]="{ 'is-invalid': submitted && formControls.reviewer_name.errors }">
 
-      <mat-error class="error" *ngIf="nameValid.invalid">{{getErrorMessageName()}}</mat-error>
+      <mat-error *ngIf="submitted && formControls.reviewer_name.errors"
+        class="text-danger">
+        <div *ngIf="formControls.reviewer_name.errors.required">Введите имя</div>
+        <div *ngIf="formControls.reviewer_name.errors.minlength">Имя должно содержать больше одного символа</div>
+      </mat-error>
     </mat-form-field>
-
     <mat-form-field>
-    <textarea matInput placeholder="Отзыв" [formControl]="messageValid" type="text" id="message" class="md-textarea"
+    <textarea matInput placeholder="Отзыв" formControlName="message" type="text" id="message" class="md-textarea"
+              [ngClass]="{ 'is-invalid': submitted && formControls.message.errors }"
               [(ngModel)]="single_review.message"
-              required></textarea>
-      <mat-error class="error" *ngIf="messageValid.invalid">{{getErrorMessageReview()}}</mat-error>
-    </mat-form-field>
+    ></textarea>
 
-    <button mat-raised-button color="primary" (click)="send()" type="submit"
+      <mat-error *ngIf="submitted && formControls.message.errors" class="text-danger">
+        <div *ngIf="formControls.message.errors.required">Введите отзыв</div>
+        <div *ngIf="formControls.reviewer_name.errors.minlength">Отзыв должен содержать больше тридцати символов</div>
+      </mat-error>
+    </mat-form-field>
+    <button mat-raised-button color="primary" type="submit"
             class="btn btn-info waves-light menu-close">Отправить
     </button>
+
   </form>
 
   <div class="reviews">

@@ -1,5 +1,5 @@
-import {Component, OnInit, Input} from '@angular/core';
-import {FormControl, Validators} from '@angular/forms';
+import {Component, OnInit} from '@angular/core';
+import {FormControl, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {faPen} from '@fortawesome/free-solid-svg-icons';
 import {faTrash} from '@fortawesome/free-solid-svg-icons';
 import {MatSnackBar} from '@angular/material/snack-bar';
@@ -32,12 +32,12 @@ export class ReviewComponent implements OnInit {
 
   review_data: Review[];
 
-  selectedReview: Review;
-
-  error = false;
+  registerForm: FormGroup;
+  submitted = false;
 
   constructor(private reviewService: ReviewService,
-              private _snackBar: MatSnackBar) {
+              private _snackBar: MatSnackBar,
+              private formBuilder: FormBuilder) {
   }
 
   openSnackBar() {
@@ -52,27 +52,21 @@ export class ReviewComponent implements OnInit {
       .subscribe((data: any) => {
         this.review_data = data;
       });
+
+    this.registerForm = this.formBuilder.group({
+      'reviewer_name' : ['', [Validators.required, Validators.minLength(2)]],
+      'message' : ['', [Validators.required, Validators.minLength(30)]]
+    })
   }
 
-  nameValid = new FormControl('', [Validators.required]);
-  messageValid = new FormControl('', [Validators.required]);
-
-  getErrorMessageName() {
-    return this.nameValid.hasError('required') ? 'Введите ваше имя' :
-      '';
-  }
-
-  getErrorMessageReview() {
-    return this.messageValid.hasError('required') ? 'Введите ваш отзыв' :
-      '';
-  }
+  get formControls() { return this.registerForm.controls; }
 
   send() {
     if (!this.single_review.id) {
-      if (this.single_review.review_date == undefined ||
-        this.single_review.reviewer_name == undefined ||
-        this.single_review.message == undefined) {
-        this.error = true;
+      this.submitted = true;
+
+      if (this.registerForm.invalid) {
+        return;
       }
 
       let data = {
@@ -81,31 +75,27 @@ export class ReviewComponent implements OnInit {
         message: this.single_review.message
       };
 
-      if (this.single_review.reviewer_name != undefined &&
-        this.single_review.message != undefined &&
-        this.single_review.reviewer_name.trim().length != 0 &&
-        this.single_review.message.trim().length != 0) {
-        this.reviewService
-          .createReview(data)
-          .subscribe(
-            suc => {
-              this.openSnackBar();
-            }
-          );
-      }
+      this.reviewService
+        .createReview(data)
+        .subscribe(
+          suc => {
+            this.openSnackBar();
+          }
+        );
     } else {
-      if (this.single_review.reviewer_name != undefined &&
-        this.single_review.message != undefined &&
-        this.single_review.reviewer_name.trim().length != 0 &&
-        this.single_review.message.trim().length != 0) {
-        this.reviewService
-          .updateReview(this.single_review.id, this.single_review)
-          .subscribe(
-            suc => {
-              this.openSnackBar();
-            }
-          )
+      this.submitted = true;
+
+      if (this.registerForm.invalid) {
+        return;
       }
+
+      this.reviewService
+        .updateReview(this.single_review.id, this.single_review)
+        .subscribe(
+          suc => {
+            this.openSnackBar();
+          }
+        )
     }
   }
 

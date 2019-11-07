@@ -10,10 +10,6 @@ export class ReviewService {
 
   constructor(private http: HttpClient) { }
 
-  getReview(id: number): Observable<any> {
-    return this.http.get(`${this.baseUrl}/${id}`);
-  }
-
   createReview(data: Object): Observable<Object> {
     return this.http.post(`${this.baseUrl}` + 'review', data);
   }
